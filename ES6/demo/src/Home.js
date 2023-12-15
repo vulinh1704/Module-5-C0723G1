@@ -1,45 +1,14 @@
 import {Component} from "react";
+import Save from "./Save";
 
 class Home extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         student: {
-    //             name: "Linh",
-    //             age: 18
-    //         },
-    //         inputName: ""
-    //     }
-    // }
-    //
-    // render() {
-    //     return (
-    //         <>
-    //             <h1>{this.state.student.name}  | {this.state.student.age}</h1>
-    //             <h1>InputName: {this.state.inputName}</h1>
-    //             <input type="text" placeholder={"Name"} value={this.state.inputName} onChange={(event) => {
-    //                 this.setState((state) => {
-    //                     state.inputName = event.target.value;
-    //                     return state;
-    //                 })
-    //             }}/>
-    //             <button onClick={() => {
-    //                 this.setState((state) => {
-    //                     state.student.name = this.state.inputName;
-    //                     return state;
-    //                 })
-    //             }}>Nhấn</button>
-    //         </>
-    //     )
-    // }
-
     constructor() {
         super();
         this.state = {
             students: [
                 {
                     name: "Hoong",
-                    id:1
+                    id: 1
                 },
                 {
                     name: "Linh",
@@ -51,17 +20,57 @@ class Home extends Component {
         }
     }
 
-    add = () => {
+    save = () => {
         this.setState((state) => {
-            state.students.push({id: state.inputId, name: state.inputName});
+            let student = state.students.find(item => item.id === state.inputId);
+            if(student) {
+                let studentUpdate = {id: state.inputId, name: state.inputName}
+                for (let i = 0; i < state.students.length; i++) {
+                    if(state.students[i].id === state.inputId) {
+                        state.students[i] = studentUpdate;
+                        break;
+                    }
+                }
+            } else {
+                state.students.push({id: state.inputId, name: state.inputName});
+            }
+            state.inputId = "";
+            state.inputName = "";
             return state;
         })
     }
 
     input = (event) => {
         this.setState((state) => {
-            console.log(event.target.value, event.target.name);
             state = {...state, [event.target.name]: event.target.value}
+            return state;
+        })
+    }
+
+    remove = (id) => {
+        this.setState((state) => {
+            // for (let i = 0; i < state.students.length; i++) {
+            //     if(id === this.state.students[i].id) {
+            //         state.students.splice(i, 1);
+            //         break;
+            //     }
+            // }
+            // return state;
+            let isConfirm = window.confirm("Are you ok ?");
+            if (isConfirm) {
+                state.students = state.students.filter((item) => item.id !== id);
+                return state;
+            } else {
+                return state;
+            }
+        })
+    }
+
+    showFormUpdate = (id) => {
+        let student = this.state.students.find(item => item.id === id);
+        this.setState((state) => {
+            state.inputId = student.id;
+            state.inputName = student.name;
             return state;
         })
     }
@@ -70,13 +79,18 @@ class Home extends Component {
         return (
             <>
                 {
-                    this.state.students.map(item => {
-                        return (<><h1>{item.name} | {item.id}</h1></>)
+                    this.state.students.map((item) => {
+                        return (<div key={item.id}>
+                            <h1>Id : {item.id} | Name: {item.name}
+                                <button onClick={() => this.remove(item.id)}>Delete</button>
+                                <button onClick={() => this.showFormUpdate(item.id)}>Update</button>
+                            </h1>
+                        </div>)
                     })
                 }
-                <input type="text" name={"inputId"} placeholder={"Id"} onChange={(event) => {this.input(event)}}/>
-                <input type="text" name={"inputName"} placeholder={"Name"}  onChange={(event) => {this.input(event)}}/>
-                <button onClick={this.add}>Nhấn</button>
+                <Save inputName={this.state.inputName} inputId={this.state.inputId}
+                      input={this.input} save={this.save}
+                />
             </>
         )
     }
