@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/demo-redux.iml" filepath="$PROJECT_DIR$/.idea/demo-redux.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/crud-redux.iml" filepath="$PROJECT_DIR$/.idea/crud-redux.iml" />
     </modules>
   </component>
 </project>
