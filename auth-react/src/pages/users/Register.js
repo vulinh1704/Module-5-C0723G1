@@ -1,26 +1,25 @@
-import {Form, Formik,Field} from "formik";
-import {useDispatch, useSelector} from "react-redux";
-import {login} from "../../redux/services/userService";
+import {Field, Form, Formik} from "formik";
+import {register} from "../../redux/services/userService";
 import {useNavigate} from "react-router-dom";
 
-function Login() {
-    const dispatch = useDispatch();
+function Register() {
     const navigate = useNavigate();
-    const loginForm = (values) => {
-        dispatch(login(values)).then(() => {
-            navigate("/products/home")
+    const registerForm = (values) => {
+        register(values).then(() => {
+            navigate("/login");
         })
     }
     return (
         <>
             <div style={{width:"30%", marginLeft: "40%"}}>
-            <h1>Form Login</h1>
+                <h1>Form Đăng Ký</h1>
                 <Formik
                     initialValues={{
                         username: "",
-                        password: ""
+                        password: "",
+                        confirmPassword: ""
                     }}
-                    onSubmit={loginForm}
+                    onSubmit={registerForm}
                 >
                     <Form>
                         <div className="mb-3">
@@ -31,11 +30,15 @@ function Login() {
                             <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
                             <Field type="password" className="form-control" name={"password"} id="exampleInputPassword1"/>
                         </div>
+                        <div className="mb-3">
+                            <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                            <Field type="password" className="form-control" name={"confirmPassword"} id="exampleInputPassword1"/>
+                        </div>
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </Form>
                 </Formik>
-
             </div>
-        </>)
+        </>
+    )
 }
-export default Login;
+export default Register;
